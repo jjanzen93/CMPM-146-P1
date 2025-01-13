@@ -19,23 +19,25 @@ def find_path (source_point, destination_point, mesh):
 
 
     # identify source and destination boxes
-    # mesh returns (box): ([adjacent boxes])
-    """
-    add all boxes to a list/dict
-    iterate through list/dict
-        if source_point in current box
-            source_box = current box
-        if destination_point in current box
-            destination box = current box
-        if source and destination box are found
-            break
-    """
+    # mesh returns (box): [(adjacent boxes)]
+    source_box = None
+    dest_box = None
 
+    for box in mesh['boxes']:   #iterate through list of boxes
+        x1, x2, y1, y2 = box
+
+        if x1 <= source_point[0] <= x2 and y1 <= source_point[1] <= y2:    # check if source point is within box
+            source_box = box
+        if x1 <= destination_point[0] <= x2 and y1 <= destination_point[1] <= y2:    # check if destination point is within box
+            dest_box = box
+        if source_box and dest_box:    # if both source and destination boxes are found, break
+            break
+        print(source_box)
+            
     # Frontier for BFS
     """
-
     frontier = Queue()
-    frontier = put.(source_point)
+    frontier = put.(source_box)
     came_from = dict()
     came_from[start] = None
 
@@ -44,6 +46,5 @@ def find_path (source_point, destination_point, mesh):
         for next not in came_from:
             frontier.put(next)
             came_from[next] = current
-
     """
     return path, boxes.keys()
