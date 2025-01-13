@@ -25,15 +25,19 @@ def find_path (source_point, destination_point, mesh):
 
     for box in mesh['boxes']:   #iterate through list of boxes
         x1, x2, y1, y2 = box
-
+        print(f"box: {box}")
         if x1 <= source_point[0] <= x2 and y1 <= source_point[1] <= y2:    # check if source point is within box
             source_box = box
         if x1 <= destination_point[0] <= x2 and y1 <= destination_point[1] <= y2:    # check if destination point is within box
             dest_box = box
         if source_box and dest_box:    # if both source and destination boxes are found, break
             break
-        print(source_box)
-            
+    
+    # debug prints
+    print(f"Source point: {source_point} \nDestination point: {destination_point}")
+    print(f"Source box: {source_box}")
+    print(f"Destination box: {dest_box}")
+
     # Frontier for BFS
     """
     frontier = Queue()
