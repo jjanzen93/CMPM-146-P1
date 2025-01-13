@@ -1,3 +1,5 @@
+from queue import Queue
+
 def find_path (source_point, destination_point, mesh):
 
     """
@@ -36,19 +38,35 @@ def find_path (source_point, destination_point, mesh):
     # debug prints
     print(f"Source point: {source_point} \nDestination point: {destination_point}")
     print(f"Source box: {source_box}")
-    print(f"Destination box: {dest_box}")
+    print(f"Destination box: {dest_box}") 
 
-    # Frontier for BFS
-    """
+    # Frontier for BFS adapted from Amit Patel
     frontier = Queue()
-    frontier = put.(source_box)
-    came_from = dict()
-    came_from[start] = None
+    frontier.put(source_box)
+    boxes = dict()
+    boxes[source_box] = None
 
     while not frontier.empty():
-        current_box = frontier.get()
-        for next not in came_from:
-            frontier.put(next)
-            came_from[next] = current
-    """
+        current = frontier.get()
+        for next in mesh['adj'][current]:
+            if next not in boxes:
+                frontier.put(next)
+                boxes[next] = current
+
+    # Check if dest_box is reachable
+    if dest_box not in boxes:
+        print("No path!")
+        return None, []
+
+    # BFS adapted from Amit Patel
+    current = dest_box
+    box_path = []
+    while current != source_box:
+        box_path.append(current)
+        current = boxes[current]
+    box_path.append(source_box)
+    box_path.reverse()
+
+    path = [source_point, destination_point]
+
     return path, boxes.keys()
