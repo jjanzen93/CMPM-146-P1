@@ -31,9 +31,9 @@ def find_path (source_point, destination_point, mesh):
             break
     """
 
-
     # Frontier for BFS
     """
+
     frontier = Queue()
     frontier = put.(source_point)
     came_from = dict()
