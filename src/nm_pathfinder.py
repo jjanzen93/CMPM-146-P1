@@ -1,5 +1,6 @@
 from queue import Queue
 import math
+import sys
 
 def find_path (source_point, destination_point, mesh):
 
@@ -25,7 +26,6 @@ def find_path (source_point, destination_point, mesh):
     # mesh returns (box): [(adjacent boxes)]
     source_box = None
     dest_box = None
-
     for box in mesh['boxes']:   #iterate through list of boxes
         x1, x2, y1, y2 = box
         if x1 <= source_point[0] <= x2 and y1 <= source_point[1] <= y2:    # check if source point is within box
@@ -79,9 +79,9 @@ def find_path (source_point, destination_point, mesh):
     path.append(destination_point)
     while current != source_box:
         path.append(detail_points[current])
+        print(f"Detail points: {detail_points[current]}")
         current = came_from[current]
     path.append(detail_points[source_box])
-    path.reverse()
 
     boxes = came_from
 
