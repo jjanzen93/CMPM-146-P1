@@ -1,4 +1,5 @@
 from queue import Queue
+import math
 
 def find_path (source_point, destination_point, mesh):
 
@@ -33,11 +34,6 @@ def find_path (source_point, destination_point, mesh):
             dest_box = box
         if source_box and dest_box:    # if both source and destination boxes are found, break
             break
-    
-    # debug prints
-    print(f"Source point: {source_point} \nDestination point: {destination_point}")
-    print(f"Source box: {source_box}")
-    print(f"Destination box: {dest_box}") 
 
     # Modified Frontier for BFS adapted from Amit Patel
     frontier = Queue()
@@ -48,25 +44,30 @@ def find_path (source_point, destination_point, mesh):
 
     while not frontier.empty():
         current = frontier.get()
-        for next in mesh['adj'][current]:
+        for next in mesh['adj'][current]:   # explore all neighbors
             if next not in came_from:
+                frontier.put(next)
+                came_from[next] = current
                 # compute set of legal lines
                 # x range of border = [max(b1x1, b2x1), min(b1x2, b2x2)], y range of border = [max(b1y1, b2y1), min(b1y2, b2y2)]
                 b1x1, b1x2, b1y1, b1y2 = current
                 b2x1, b2x2, b2y1, b2y2 = next
 
-                # valid paths 
+                # valid detail point range
                 border_x = [max(b1x1, b2x1), min(b1x2, b2x2)]  
                 border_y = [max(b1y1, b2y1), min(b1y2, b2y2)]
 
-                #current_x, current_y = detail_points[current]
-                #distance = euclidean distance
+                # calculate euclidean distance and choose closest point
+                closest = float('inf')
+                for x in range(border_x[0], border_x[1] + 1):   # compare distance from current point to closest valid point
+                    for y in range(border_y[0], border_y[1] + 1):
+                        temp_point = (x, y)
+                        distance = math.dist(detail_points[current], temp_point)   
+                        if distance < closest:
+                            next_point = temp_point
+                            closest = distance
 
-                next_point = (border_x[0], border_y[0])    # always chooses the first detail_point, not optimized
                 detail_points[next] = next_point
-
-                frontier.put(next)
-                came_from[next] = current
 
     # Check if dest_box is reachable
     if dest_box not in came_from:
@@ -81,9 +82,6 @@ def find_path (source_point, destination_point, mesh):
         current = came_from[current]
     path.append(detail_points[source_box])
     path.reverse()
-
-    print(f"source point: {source_point}")
-    print(f"dest point: {destination_point}")
 
     boxes = came_from
 
