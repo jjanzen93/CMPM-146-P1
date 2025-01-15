@@ -1,5 +1,5 @@
 from maze_environment import load_level, show_level, save_level_costs
-from math import inf, sqrt
+from math import inf, sqrt, dist
 from heapq import heappop, heappush
 
 
@@ -30,7 +30,7 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         # investigate children
         for (child, step_cost) in adj(graph, cell):
             # calculate cost along this path to child
-            cost_to_child = priority + transition_cost(graph, cell, child)
+            cost_to_child = priority + transition_cost(graph, cell, child) # + dist(cell, child)
             if child not in pathcosts or cost_to_child < pathcosts[child]:
                 pathcosts[child] = cost_to_child            # update the cost
                 paths[child] = cell                         # set the backpointer
@@ -42,8 +42,6 @@ def path_to_cell(cell, paths):
     if cell == []:
         return []
     return path_to_cell(paths[cell], paths) + [cell]
-    
-
 
 
 def navigation_edges(level, cell):
